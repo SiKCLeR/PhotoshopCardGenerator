@@ -1,0 +1,4 @@
+function testCSVParser()
+{
+    alert('test');
+}
