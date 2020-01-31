@@ -28,8 +28,6 @@ function CSVData(_filePath) // Class definition (yup it's weird in JSX)
             else 
             {
                 alert(curEntryList.length)
-                //this.m_entryList.push([]);
-                //this.m_entryList[this.m_entryList.length-1] = curEntryList;
                 this.m_entryList[this.m_entryList.length] = curEntryList;
             }
             curEntry = '';
@@ -46,15 +44,9 @@ function CSVData(_filePath) // Class definition (yup it's weird in JSX)
     {
         curEntryList.push(curEntry);
         this.m_entryList[this.m_entryList.length] = curEntryList;
-        //this.m_entryList.push([]);
-        //this.m_entryList[this.m_entryList.length-1].push(curEntryList);
     }
 
-    //alert(curEntry)
     fs.close();
-    //alert(this.m_entryTypes)
-    //alert(this.m_entryList.length);
-    //alert(this.m_entryList[0].length);
 };
 
 CSVData.prototype.printCSVData = function()

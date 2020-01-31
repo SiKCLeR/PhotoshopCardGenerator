@@ -10,9 +10,10 @@
     //alert('hello world');
     var testCSVData = new CSVData("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/Les Mondes d'Olim - Creatures.csv");
     //testCSVParser()
-    testCSVData.printCSVData();
-    alert(testCSVData.m_entryTypes);
-    alert(testCSVData.m_entryList);
+    //testCSVData.printCSVData();
+    app.activeDocument.layers[0].textItem.contents = testCSVData.m_entryList[0][2]
+    //alert(testCSVData.m_entryTypes);
+    //alert(testCSVData.m_entryList);
 })();
 
 
