@@ -33,7 +33,7 @@ function CSVData(_filePath) // Class definition (yup it's weird in JSX)
             curEntry = '';
             curEntryList = [];
         }
-        else // Else keep feeling the current entry
+        else // Else keep filling the current entry
         {
             curEntry += curChar;
         }
