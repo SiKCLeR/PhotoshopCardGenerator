@@ -1,7 +1,16 @@
 //alert('hello world');
 //include "CSVParser.jsx"
 //import "CSVParser.jsx"
-#include "D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/CSVParser.jsx"
+var rootPath = app.activeDocument.path.fsName.replace(/\\/g, '/');
+//#include test as string
+//import CSVData from 'CSVParser'
+// //@include 'CSVParser.jsx'
+#include "D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/CSVParser.jsx";
+//#include test;
+//alert(rootPath);
+//alert(app.path.fsName)
+//#include test
+//#include "CSVParser.jsx"
 //#include "CSVParser.jsx"
 //#include "../CSVParser.jsx"
 
@@ -106,7 +115,11 @@ function GenerateCards(filePath)
 
 (function main()
 {
-    GenerateCards("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/Les Mondes d'Olim - Cards Sheet.csv");
+    app.open(new File(rootPath+"/Resources/CARD_STANDARD_TEMPLATE.psd"));
+    app.activeDocument.close();
+    
+    //GenerateCards("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/Les Mondes d'Olim - Cards Sheet.csv");
+    
     //alert(app.path.fsName)
     //parsedCSV = new CSVData("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/Les Mondes d'Olim - Cards Sheet.csv");
     //testCSVParser();
