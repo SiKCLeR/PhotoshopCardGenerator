@@ -5,7 +5,8 @@ var rootPath = app.activeDocument.path.fsName.replace(/\\/g, '/');
 //#include test as string
 //import CSVData from 'CSVParser'
 // //@include 'CSVParser.jsx'
-#include "D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/CSVParser.jsx";
+#include "D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/CSVParser.jsx"; // CS2 Requires full path
+//#include "CSVParser.jsx"; // Later versions can reference script relatively to the current file
 //#include test;
 //alert(rootPath);
 //alert(app.path.fsName)
