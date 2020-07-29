@@ -27,7 +27,6 @@ function CSVData(_filePath) // Class definition (yup it's weird in JSX)
             }
             else 
             {
-                alert(curEntryList.length)
                 this.m_entryList[this.m_entryList.length] = curEntryList;
             }
             curEntry = '';

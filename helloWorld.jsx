@@ -6,6 +6,7 @@ var rootPath = app.activeDocument.path.fsName.replace(/\\/g, '/');
 //import CSVData from 'CSVParser'
 // //@include 'CSVParser.jsx'
 #include "D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/CSVParser.jsx";
+//#include "CSVParser.jsx"; // Only works with recent versions of CS, doesn't work with CS2
 //#include test;
 //alert(rootPath);
 //alert(app.path.fsName)
@@ -71,8 +72,8 @@ function GenerateCards(filePath)
 {
     var parsedCSV = new CSVData(filePath);
     var entriesAct = [];
-    var entriesPath = [];
     var cardID = "";
+    var exportCategory = "";
 
     for (var u = 0; u < parsedCSV.m_entryList.length; u++ ) 
     {
@@ -82,29 +83,40 @@ function GenerateCards(filePath)
             switch(entryTypeAr[0])
             {
                 case "ID":
-                    entriesPath = parsedCSV.m_entryList[u][i];
-                    //alert("ID");
+                    cardID = parsedCSV.m_entryList[u][i];
                     break;
                 case "TEMPLATE":
-                    //alert("TEMPLATE");
+                    var templatePath = rootPath + "/" + entryTypeAr[1] + "/" + parsedCSV.m_entryList[u][i] + ".psd"
+                    if(app.activeDocument.fullName.fsName.replace(/\\/g, '/').toLowerCase() != templatePath.toLowerCase())
+                    {
+                        app.open(new File(templatePath));
+                    }
                     break;
                 case "IMG":
-                    //alert("IMG");
+                    //https://stackoverflow.com/questions/42875016/load-in-an-image-file-in-photoshop-and-place-it-at-a-specific-position
                     break;
                 case "LAYER":
                     SetOnlyActiveLayer(entryTypeAr[1], parsedCSV.m_entryList[u][i]);
-                    //alert("Layer Action Path: " + entryTypeAr[1] + "\nProp:" + parsedCSV.m_entryList[u][i]);
                     break;
                 case "TEXT":
                     SetTextLayer(entryTypeAr[1], parsedCSV.m_entryList[u][i]);
-                    //alert("Text Action Path: " + entryTypeAr[1] + "\nProp:" + parsedCSV.m_entryList[u][i]);
+                    break;
+                case "CATEGORY":
+                    exportCategory = parsedCSV.m_entryList[u][i];
                     break;
                 default:
-                    //alert("Unknown action type")
                     break;
             }
         }
-        var saveFile = new File("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Export/" + entriesPath + "_" + u +".png");
+        var cardFolderCat = rootPath + "/Export/" + exportCategory;
+        var fullCardPath = rootPath + "/Export/" + exportCategory + "/" + cardID + ".png";
+
+        var folder = Folder(cardFolderCat);
+        if(!folder.exists) 
+        {
+            folder.create();
+        }
+        var saveFile = new File(fullCardPath);
         var pngOpts = new PNGSaveOptions();
         pngOpts.interlaced = false;
         activeDocument.saveAs(saveFile, pngOpts, true, Extension.LOWERCASE);
@@ -115,10 +127,10 @@ function GenerateCards(filePath)
 
 (function main()
 {
-    app.open(new File(rootPath+"/Resources/CARD_STANDARD_TEMPLATE.psd"));
-    app.activeDocument.close();
+    //app.open(new File(rootPath+"/Resources/CARD_STANDARD_TEMPLATE.psd"));
+    //app.activeDocument.close();
     
-    //GenerateCards("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/Les Mondes d'Olim - Cards Sheet.csv");
+    GenerateCards(rootPath + "/Resources/Les Mondes d'Olim - Cards Sheet.csv");
     
     //alert(app.path.fsName)
     //parsedCSV = new CSVData("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/Les Mondes d'Olim - Cards Sheet.csv");
