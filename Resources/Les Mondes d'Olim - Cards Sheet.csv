@@ -1,3 +1,3 @@
 ID,CATEGORY,TEMPLATE@RESOURCES,IMG@IMAGE,LAYER@STYLE,TEXT@TITLE,TEXT@DESCRIPTION,TEXT@SELL_COST,TEXT@BUY_COST,TEXT@PLAY_COST,TEXT@UPGRADE_LEVEL,TEXT@UPGRADE_DESCRIPTION,QUANTITY
-SKILL_TEST01,SKILL,CARD_STANDARD_TEMPLATE,SKILLS_DEFAULT,FORCE,Amazing skill,This is an amazing skill,1,2,3,4,This is a even more amazing skill 2,5
-SKILL_TEST02,SKILL,CARD_STANDARD_TEMPLATE,SKILLS_DEFAULT,AGILITY,Another skill,This is an amazing skill for agility,1,2,3,8,This is a even more amazing skill for agility 2,2
+SKILL_TEST01,SKILL,CARD_STANDARD_TEMPLATE,Test,FORCE,Amazing skill,This is an amazing skill,1,2,3,4,This is a even more amazing skill 2,5
+SKILL_TEST02,SKILL,CARD_STANDARD_TEMPLATE,Test2,AGILITY,Another skill,This is an amazing skill for agility,1,2,3,8,This is a even more amazing skill for agility 2,2

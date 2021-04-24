@@ -69,6 +69,24 @@ function SetOnlyActiveLayer(layerParentPath, onlyActiveName)
     }
 }
 
+function LoadImageIntoLayerSet(layerSetPath, imagePath)
+{
+    alert(imagePath);
+    var mainDoc = activeDocument;
+    var folderLayer = GetLayerFromRoot(ParseLayerPath(layerSetPath));
+
+    var loadedFile = new File(imagePath);
+    var importDoc = open(loadedFile);
+
+    var importedLayer = importDoc.artLayers[0].duplicate(mainDoc);
+    app.activeDocument = mainDoc;
+    importDoc.close();
+
+    importedLayer.name = "TMP_IMAGE";
+    importedLayer.move(folderLayer, ElementPlacement.INSIDE);
+    return importedLayer;
+}
+
 function GenerateCards(filePath)
 {
     var parsedCSV = new CSVData(filePath);
@@ -87,6 +105,7 @@ function GenerateCards(filePath)
         for(var i = 0; i < parsedCSV.m_entryTypes.length; i++)
         {
             var entryTypeAr = parsedCSV.m_entryTypes[i].split('@');
+            var loadedImage;
             switch(entryTypeAr[0])
             {
                 case "ID":
@@ -100,7 +119,8 @@ function GenerateCards(filePath)
                     }
                     break;
                 case "IMG":
-                    //https://stackoverflow.com/questions/42875016/load-in-an-image-file-in-photoshop-and-place-it-at-a-specific-position
+                    var imagePath = rootPath + "/" + parsedCSV.m_entryList[u][i] + ".png";
+                    loadedImage = LoadImageIntoLayerSet(entryTypeAr[1], imagePath);
                     break;
                 case "LAYER":
                     SetOnlyActiveLayer(entryTypeAr[1], parsedCSV.m_entryList[u][i]);
@@ -129,44 +149,39 @@ function GenerateCards(filePath)
         var pngOpts = new PNGSaveOptions();
         pngOpts.interlaced = false;
         activeDocument.saveAs(saveFile, pngOpts, true, Extension.LOWERCASE);
+
+        if(loadedImage != null)
+        {
+            loadedImage.remove();
+        }
         //app.activeDocument.saveAs(new File("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Export/Exported/"+u+".png"));
     }
     //alert(parsedCSV.m_entryTypes[0].split('_'));
 }
 
-(function main()
+/*function TestLoadImage(imagePath, layerName)
 {
-    //app.open(new File(rootPath+"/Resources/CARD_STANDARD_TEMPLATE.psd"));
-    //app.activeDocument.close();
-    
-    GenerateCards(rootPath + "/Resources/Les Mondes d'Olim - Cards Sheet.csv");
-    
-    //alert(rootPath + "/Resources/Les Mondes d'Olim - Cards Sheet.csv");
-    //alert(app.path.fsName);
-    //parsedCSV = new CSVData("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/Les Mondes d'Olim - Cards Sheet.csv");
-    //testCSVParser();
-    //alert('hello world');
-    //alert('hello world');
-    //var testCSVData = new CSVData("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/Les Mondes d'Olim - Cards Sheet.csv");
-    //testCSVParser()
-    //testCSVData.printCSVData();
-    //app.activeDocument.layers[0].textItem.contents = testCSVData.m_entryList[0][2]
-    /*var str = "";
-    for(var x = 0; x < app.activeDocument.layers.length; x++)
-    {
-        str += app.activeDocument.layers[x].name + "\n";
-    }
-    alert(str);
+    var mainDoc = activeDocument;
+    //var theLayer = activeDocument.artLayers.getByName(layerName);
+    var folderLayer = GetLayerFromRoot(layerName);//activeDocument.layers.getByName(layerName);
 
-    
-    var l = app.activeDocument.GetByName("TITLE");
-    alert(l.testItem.contents);*/
-    // Function tests
-    //SetTextLayer("TEST01/TEST02/TEST", "Lolilol");
-    //SetOnlyActiveLayer("STYLE/AGILITY");
-    //alert(testCSVData.m_entryTypes[0].split('_'));
-    //alert(testCSVData.m_entryTypes);
-    //alert(testCSVData.m_entryList);
+    var file = new File(imagePath);
+    var imgDoc = open(file);
+
+    var importedLayer = imgDoc.artLayers[0].duplicate(mainDoc);
+    app.activeDocument = mainDoc;
+    imgDoc.close();
+
+    importedLayer.name = "TotoLolilol";
+    importedLayer.move(folderLayer, ElementPlacement.INSIDE);
+}*/
+
+(function main()
+{    
+    GenerateCards(rootPath + "/Resources/Les Mondes d'Olim - Cards Sheet.csv");
+
+    //TestLoadImage((rootPath + "/Test.png"), ["FolderTest"]);
+
 })();
 
 
