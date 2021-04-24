@@ -2,11 +2,12 @@
 //include "CSVParser.jsx"
 //import "CSVParser.jsx"
 var rootPath = app.activeDocument.path.fsName.replace(/\\/g, '/');
+var exportFolderCat = rootPath + "/Export";
 //#include test as string
 //import CSVData from 'CSVParser'
 // //@include 'CSVParser.jsx'
-#include "D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/CSVParser.jsx";
-//#include "CSVParser.jsx"; // Only works with recent versions of CS, doesn't work with CS2
+//#include "D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/CSVParser.jsx"
+#include "CSVParser.jsx"; // Only works with recent versions of CS, doesn't work with CS2
 //#include test;
 //alert(rootPath);
 //alert(app.path.fsName)
@@ -75,6 +76,12 @@ function GenerateCards(filePath)
     var cardID = "";
     var exportCategory = "";
 
+    var exportFolder = Folder(exportFolderCat);
+    if(!exportFolder.exists) 
+    {
+        exportFolder.create();
+    }
+
     for (var u = 0; u < parsedCSV.m_entryList.length; u++ ) 
     {
         for(var i = 0; i < parsedCSV.m_entryTypes.length; i++)
@@ -108,14 +115,16 @@ function GenerateCards(filePath)
                     break;
             }
         }
-        var cardFolderCat = rootPath + "/Export/" + exportCategory;
-        var fullCardPath = rootPath + "/Export/" + exportCategory + "/" + cardID + ".png";
+
+        var cardFolderCat = exportFolderCat + "/" + exportCategory;
+        var fullCardPath = exportFolderCat + "/" + exportCategory + "/" + cardID + ".png";
 
         var folder = Folder(cardFolderCat);
         if(!folder.exists) 
         {
             folder.create();
         }
+
         var saveFile = new File(fullCardPath);
         var pngOpts = new PNGSaveOptions();
         pngOpts.interlaced = false;
@@ -132,7 +141,8 @@ function GenerateCards(filePath)
     
     GenerateCards(rootPath + "/Resources/Les Mondes d'Olim - Cards Sheet.csv");
     
-    //alert(app.path.fsName)
+    //alert(rootPath + "/Resources/Les Mondes d'Olim - Cards Sheet.csv");
+    //alert(app.path.fsName);
     //parsedCSV = new CSVData("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/Les Mondes d'Olim - Cards Sheet.csv");
     //testCSVParser();
     //alert('hello world');

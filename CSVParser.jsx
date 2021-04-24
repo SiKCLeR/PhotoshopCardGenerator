@@ -20,17 +20,20 @@ function CSVData(_filePath) // Class definition (yup it's weird in JSX)
         }
         else if(curChar == '\n') // Next Line
         {
-            curEntryList.push(curEntry);
-            if(this.m_entryTypes == null)
+            if(curEntryList.length > 0) // Sometimes we have multiple \n back to back (I don't know why)
             {
-                this.m_entryTypes = curEntryList;
+                curEntryList.push(curEntry);
+                if(this.m_entryTypes == null)
+                {
+                    this.m_entryTypes = curEntryList;
+                }
+                else 
+                {
+                    this.m_entryList[this.m_entryList.length] = curEntryList;
+                }
+                curEntry = '';
+                curEntryList = [];
             }
-            else 
-            {
-                this.m_entryList[this.m_entryList.length] = curEntryList;
-            }
-            curEntry = '';
-            curEntryList = [];
         }
         else // Else keep filling the current entry
         {
