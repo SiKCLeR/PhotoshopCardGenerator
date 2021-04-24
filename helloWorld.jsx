@@ -1,20 +1,7 @@
-//alert('hello world');
-//include "CSVParser.jsx"
-//import "CSVParser.jsx"
+#include "CSVParser.jsx"; // Only works with recent versions of CS, doesn't work with CS2
+
 var rootPath = app.activeDocument.path.fsName.replace(/\\/g, '/');
 var exportFolderCat = rootPath + "/Export";
-//#include test as string
-//import CSVData from 'CSVParser'
-// //@include 'CSVParser.jsx'
-//#include "D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/CSVParser.jsx"
-#include "CSVParser.jsx"; // Only works with recent versions of CS, doesn't work with CS2
-//#include test;
-//alert(rootPath);
-//alert(app.path.fsName)
-//#include test
-//#include "CSVParser.jsx"
-//#include "CSVParser.jsx"
-//#include "../CSVParser.jsx"
 
 function ParseLayerPath(path)
 {
@@ -24,7 +11,6 @@ function ParseLayerPath(path)
 function GetLayer(curLayer, layerPathAr)
 {
     var layerName = layerPathAr.shift();
-    //var layer = curLayer.GetByName(layerName);
 
     for(var x = 0; x < curLayer.layers.length; x++)
     {
@@ -71,7 +57,6 @@ function SetOnlyActiveLayer(layerParentPath, onlyActiveName)
 
 function LoadImageIntoLayerSet(layerSetPath, imagePath)
 {
-    alert(imagePath);
     var mainDoc = activeDocument;
     var folderLayer = GetLayerFromRoot(ParseLayerPath(layerSetPath));
 
@@ -154,49 +139,10 @@ function GenerateCards(filePath)
         {
             loadedImage.remove();
         }
-        //app.activeDocument.saveAs(new File("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Export/Exported/"+u+".png"));
     }
-    //alert(parsedCSV.m_entryTypes[0].split('_'));
 }
-
-/*function TestLoadImage(imagePath, layerName)
-{
-    var mainDoc = activeDocument;
-    //var theLayer = activeDocument.artLayers.getByName(layerName);
-    var folderLayer = GetLayerFromRoot(layerName);//activeDocument.layers.getByName(layerName);
-
-    var file = new File(imagePath);
-    var imgDoc = open(file);
-
-    var importedLayer = imgDoc.artLayers[0].duplicate(mainDoc);
-    app.activeDocument = mainDoc;
-    imgDoc.close();
-
-    importedLayer.name = "TotoLolilol";
-    importedLayer.move(folderLayer, ElementPlacement.INSIDE);
-}*/
 
 (function main()
 {    
     GenerateCards(rootPath + "/Resources/Les Mondes d'Olim - Cards Sheet.csv");
-
-    //TestLoadImage((rootPath + "/Test.png"), ["FolderTest"]);
-
 })();
-
-
-// var fs = new File("D:/Projets/Les_Mondes_D_Olim/PhotoshopScript/Ressources/HelloWorld.txt");
-// fs.open('r');
-
-// var str = "";
-
-// while(!fs.eof)
-// {
-//     str += fs.readln();
-// }
-
-// fs.close();
-
-
-// app.activeDocument.layers[0].textItem.contents = str;
-// app.activeDocument.layers[0].name = 'Toto';
