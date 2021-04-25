@@ -142,7 +142,57 @@ function GenerateCards(filePath)
     }
 }
 
+function LoadImageIntoPosition(layerSetPath, imagePath)
+{
+    var mainDoc = activeDocument;
+    var folderLayer = GetLayerFromRoot(ParseLayerPath(layerSetPath));
+
+    var loadedFile = new File(imagePath);
+    var importDoc = open(loadedFile);
+
+    var importedLayer = importDoc.artLayers[0].duplicate(mainDoc);
+    app.activeDocument = mainDoc;
+    importDoc.close();
+
+    importedLayer.name = "TMP_IMAGE";
+    importedLayer.move(folderLayer, ElementPlacement.INSIDE);
+    return importedLayer;
+}
+
+function GenerateCardsBoard()
+{
+    var lastPosX = 0;
+    var lastPosY = 0;
+    var docWidth = app.activeDocument.width.value;
+    for(var i = 0; i < 10; i++)
+    {
+        var curCard = LoadImageIntoPosition("IMAGE", "G:/Perso/Projects/PhotoshopScripts/Export/SKILL/SKILL_TEST01.png");
+        var importWidth = curCard.bounds[2]; //[0] = X, [1] = Y, [2] = SizeX, [3] = SizeY; IN PIXELS
+
+        if((lastPosX + importWidth) > docWidth)
+        {
+            lastPosX = 0;
+            lastPosY = curCard.bounds[3];
+        }
+
+        curCard.translate(lastPosX, lastPosY);      
+        lastPosX = curCard.bounds[2];
+    }
+}
+
 (function main()
 {    
-    GenerateCards(rootPath + "/Resources/Les Mondes d'Olim - Cards Sheet.csv");
+    //var testFile = File("G:/Perso/Projects/PhotoshopScripts/Export/SKILL/SKILL_TEST01.png");
+    //var toto = open(testFile, OpenDocumentType.PNG, true);
+
+    GenerateCardsBoard();
+
+    // var files = openDialog();
+    // for(var i = 0; i < files.length; i++)
+    // {
+    //     var csvPath = files[i].fsName.replace(/\\/g, '/');
+    //     //alert(csvPath);
+    //     GenerateCards(csvPath);
+    // }
+    
 })();
