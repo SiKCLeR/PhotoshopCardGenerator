@@ -72,9 +72,8 @@ function LoadImageIntoLayerSet(layerSetPath, imagePath)
     return importedLayer;
 }
 
-function GenerateCards(filePath)
+function GenerateCards(parsedCSV)
 {
-    var parsedCSV = new CSVData(filePath);
     var entriesAct = [];
     var cardID = "";
     var exportCategory = "";
@@ -147,6 +146,7 @@ function LoadImageIntoPosition(layerSetPath, imagePath)
     var mainDoc = activeDocument;
     var folderLayer = GetLayerFromRoot(ParseLayerPath(layerSetPath));
 
+    alert(imagePath);
     var loadedFile = new File(imagePath);
     var importDoc = open(loadedFile);
 
@@ -159,40 +159,177 @@ function LoadImageIntoPosition(layerSetPath, imagePath)
     return importedLayer;
 }
 
-function GenerateCardsBoard()
+function RemoveAllSubLayers(curLayer)
 {
-    var lastPosX = 0;
-    var lastPosY = 0;
-    var docWidth = app.activeDocument.width.value;
-    for(var i = 0; i < 10; i++)
+    for(var i = (curLayer.layers.length - 1); i > -1; i--)
     {
-        var curCard = LoadImageIntoPosition("IMAGE", "G:/Perso/Projects/PhotoshopScripts/Export/SKILL/SKILL_TEST01.png");
-        var importWidth = curCard.bounds[2]; //[0] = X, [1] = Y, [2] = SizeX, [3] = SizeY; IN PIXELS
+        curLayer.layers[i].remove();
+    }
+}
 
-        if((lastPosX + importWidth) > docWidth)
+function GenerateCardsBoard(parsedCSV)
+{
+    var exportFolder = Folder(exportFolderCat);
+    if(!exportFolder.exists) 
+    {
+        exportFolder.create();
+    }
+
+    var exportBoardFoler = exportFolderCat + "/Boards";
+    var boardFolder = Folder(exportBoardFoler);
+    if(!boardFolder.exists) 
+    {
+        boardFolder.create();
+    }
+
+    var boardTemplatePath = rootPath + "/Resources/CardBoardTemplate.psd";
+
+    //Load board template
+    app.open(new File(boardTemplatePath));
+
+    //Initialise global infos in pixels (check file unit)
+    var printMarginHorizontal = 53;
+    var printMarginVertical = 53;
+
+    //Initialise all export properties
+    var lastPosX = printMarginHorizontal;
+    var lastPosY = printMarginVertical;
+    var curCardBoardNb = 1;
+
+    var cardID = "";
+    var exportCategory = "";
+    var cardQtty = 0;
+    var docWidth = app.activeDocument.width.value;
+    var docHeight = app.activeDocument.height.value;
+
+    for (var u = 0; u < parsedCSV.m_entryList.length; u++ ) 
+    {
+        for(var i = 0; i < parsedCSV.m_entryTypes.length; i++)
         {
-            lastPosX = 0;
-            lastPosY = curCard.bounds[3];
+            var entryTypeAr = parsedCSV.m_entryTypes[i].split('@');
+            var loadedImage;
+            switch(entryTypeAr[0])
+            {
+                case "ID":
+                    cardID = parsedCSV.m_entryList[u][i];
+                    break;
+                case "CATEGORY":
+                    exportCategory = parsedCSV.m_entryList[u][i];
+                    break;
+                case "QUANTITY":
+                    var cardQtty = parsedCSV.m_entryList[u][i];
+                    break;
+                default:
+                    break;
+            }
         }
 
-        curCard.translate(lastPosX, lastPosY);      
-        lastPosX = curCard.bounds[2];
+        var cardFolderCat = exportFolderCat + "/" + exportCategory;
+        var fullCardPath = exportFolderCat + "/" + exportCategory + "/" + cardID + ".png";
+
+        if(cardQtty > 0)
+        {
+            var origCard = LoadImageIntoPosition("IMAGE", fullCardPath);
+            var importWidth = origCard.bounds[2]; //[0] = X, [1] = Y, [2] = SizeX, [3] = SizeY; IN PIXELS
+            var importHeight = origCard.bounds[3]; //[0] = X, [1] = Y, [2] = SizeX, [3] = SizeY; IN PIXELS
+            var curCard = origCard;
+
+            for(var q = 0; q < cardQtty; q++)
+            {
+                if(q > 0)
+                {
+                    curCard = origCard.duplicate();
+                }
+
+                if((lastPosX + importWidth) > (docWidth - printMarginHorizontal))
+                {
+                    lastPosX = printMarginHorizontal;
+                    lastPosY = curCard.bounds[3];
+                }
+
+                // If we don't have anymore space in this board
+                if((lastPosY + importHeight) > (docHeight - printMarginVertical))
+                {
+                    // Generate clean board number (format: _XXX)
+                    var boardFileNumber = "_0";
+                    if(curCardBoardNb < 10)
+                    {
+                        boardFileNumber = "_00";
+                    }
+
+                    // Generateboard file name and export as png
+                    var exportBoardFile = exportBoardFoler + "/BoardFile" + boardFileNumber + curCardBoardNb + ".png";
+                    var saveFile = new File(exportBoardFile);
+                    var pngOpts = new PNGSaveOptions();
+                    pngOpts.interlaced = false;
+                    activeDocument.saveAs(saveFile, pngOpts, true, Extension.LOWERCASE);
+
+                    // Update board number, clean positions and all current content
+                    curCardBoardNb += 1;
+                    var lastPosX = printMarginHorizontal;
+                    var lastPosY = printMarginVertical;
+                    RemoveAllSubLayers(GetLayerFromRoot(ParseLayerPath("IMAGE")));
+
+                    //Reload current card as we just cleaned everything, this is ugly but it doesn't really matter
+                    origCard = LoadImageIntoPosition("IMAGE", fullCardPath);
+                    curCard = origCard;
+                }
+
+                //Place current card (need to check, we might have som issue with alpha and such regarding defining the bounds of the image)
+                //alert("x:" + lastPosX + " - y:" + lastPosY + "\ncurX:" + curCard.bounds[0] + "curY:" + curCard.bounds[1])
+                var XTranslate = lastPosX - curCard.bounds[0].value;
+                var YTranslate = lastPosY - curCard.bounds[1].value;
+                alert("lastPosX: " + lastPosX + "\ncurCard.bounds[0]: " + curCard.bounds[0] + "\nTanslate: [" + XTranslate + "," + YTranslate + "]");
+                curCard.translate(XTranslate, YTranslate);      
+                lastPosX = curCard.bounds[2];
+            }
+        }
+
     }
+
+    var boardFileNumber = "_0";
+    if(curCardBoardNb < 10)
+    {
+        boardFileNumber = "_00";
+    }
+
+    // Generateboard file name and export as png
+    var exportBoardFile = exportBoardFoler + "/BoardFile" + boardFileNumber + curCardBoardNb + ".png";
+    var saveFile = new File(exportBoardFile);
+    var pngOpts = new PNGSaveOptions();
+    pngOpts.interlaced = false;
+    activeDocument.saveAs(saveFile, pngOpts, true, Extension.LOWERCASE);
+
+    // for(var i = 0; i < 10; i++)
+    // {
+    //     var curCard = LoadImageIntoPosition("IMAGE", "G:/Perso/Projects/PhotoshopScripts/Export/SKILL/SKILL_TEST01.png");
+    //     var importWidth = curCard.bounds[2]; //[0] = X, [1] = Y, [2] = SizeX, [3] = SizeY; IN PIXELS
+
+    //     if((lastPosX + importWidth) > docWidth)
+    //     {
+    //         lastPosX = 0;
+    //         lastPosY = curCard.bounds[3];
+    //     }
+
+    //     curCard.translate(lastPosX, lastPosY);      
+    //     lastPosX = curCard.bounds[2];
+    // }
 }
 
 (function main()
 {    
     //var testFile = File("G:/Perso/Projects/PhotoshopScripts/Export/SKILL/SKILL_TEST01.png");
     //var toto = open(testFile, OpenDocumentType.PNG, true);
+    //var parsedCSV = new CSVData(filePath);
 
-    GenerateCardsBoard();
-
-    // var files = openDialog();
-    // for(var i = 0; i < files.length; i++)
-    // {
-    //     var csvPath = files[i].fsName.replace(/\\/g, '/');
+    var files = openDialog();
+    for(var i = 0; i < files.length; i++)
+    {
+        var csvPath = files[i].fsName.replace(/\\/g, '/');
     //     //alert(csvPath);
-    //     GenerateCards(csvPath);
-    // }
+        var parsedCSV = new CSVData(csvPath);
+        GenerateCards(parsedCSV);
+        GenerateCardsBoard(parsedCSV);
+    }
     
 })();
