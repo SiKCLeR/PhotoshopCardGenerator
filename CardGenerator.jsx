@@ -1,7 +1,6 @@
 #include "CSVParser.jsx"; // Only works with recent versions of CS, doesn't work with CS2
 
 var rootPath = app.activeDocument.path.fsName.replace(/\\/g, '/');
-var exportFolderCat = rootPath + "/Export";
 
 function ImagePosInfos() // Class definition (yup it's weird in JSX)
 {
@@ -43,21 +42,27 @@ function GetLayerFromRoot(layerPathAr)
 function SetTextLayer(layerPath, text)
 {
     var layer = GetLayerFromRoot(ParseLayerPath(layerPath));
-    layer.textItem.contents = text;
+    if(layer != undefined)
+    {
+        layer.textItem.contents = text;
+    }
 }
 
 function SetOnlyActiveLayer(layerParentPath, onlyActiveName)
 {
     var parentLayer = GetLayerFromRoot(ParseLayerPath(layerParentPath));
-    for(var x = 0; x < parentLayer.layers.length; x++)
+    if(parentLayer != undefined)
     {
-        if(parentLayer.layers[x].name == onlyActiveName)
+        for(var x = 0; x < parentLayer.layers.length; x++)
         {
-            parentLayer.layers[x].visible = true;
-        }
-        else
-        {
-            parentLayer.layers[x].visible = false;
+            if(parentLayer.layers[x].name == onlyActiveName)
+            {
+                parentLayer.layers[x].visible = true;
+            }
+            else
+            {
+                parentLayer.layers[x].visible = false;
+            }
         }
     }
 }
@@ -67,16 +72,20 @@ function LoadImageIntoLayerSet(layerSetPath, imagePath)
     var mainDoc = activeDocument;
     var folderLayer = GetLayerFromRoot(ParseLayerPath(layerSetPath));
 
-    var loadedFile = new File(imagePath);
-    var importDoc = open(loadedFile);
+    if(folderLayer != undefined)
+    {
+        var loadedFile = new File(imagePath);
+        var importDoc = open(loadedFile);
 
-    var importedLayer = importDoc.artLayers[0].duplicate(mainDoc);
-    app.activeDocument = mainDoc;
-    importDoc.close();
+        var importedLayer = importDoc.artLayers[0].duplicate(mainDoc);
+        app.activeDocument = mainDoc;
+        importDoc.close();
 
-    importedLayer.name = "TMP_IMAGE";
-    importedLayer.move(folderLayer, ElementPlacement.INSIDE);
-    return importedLayer;
+        importedLayer.name = "TMP_IMAGE";
+        importedLayer.move(folderLayer, ElementPlacement.INSIDE);
+        return importedLayer;
+    }
+    return undefined;
 }
 
 function GenerateCards(parsedCSV)
@@ -84,14 +93,10 @@ function GenerateCards(parsedCSV)
     var cardID = "";
     var exportCategory = "";
 
-    var exportFolder = Folder(exportFolderCat);
-    if(!exportFolder.exists) 
-    {
-        exportFolder.create();
-    }
-
     for (var u = 0; u < parsedCSV.m_entryList.length; u++ ) 
     {
+        var exportFolderCat = rootPath;
+
         for(var i = 0; i < parsedCSV.m_entryTypes.length; i++)
         {
             var entryTypeAr = parsedCSV.m_entryTypes[i].split('@');
@@ -120,8 +125,8 @@ function GenerateCards(parsedCSV)
                     SetTextLayer(entryTypeAr[1], parsedCSV.m_entryList[u][i]);
                     break;
                 case "CATEGORY":
-                    exportCategory = parsedCSV.m_entryList[u][i];
-                    break;                
+                    exportCategory = exportFolderCat + "/" + entryTypeAr[1] + "/" + parsedCSV.m_entryList[u][i];
+                    break;
                 default:
                     break;
             }
@@ -153,16 +158,20 @@ function LoadImageIntoPosition(layerSetPath, imagePath)
     var mainDoc = activeDocument;
     var folderLayer = GetLayerFromRoot(ParseLayerPath(layerSetPath));
 
-    var loadedFile = new File(imagePath);
-    var importDoc = open(loadedFile);
+    if(folderLayer != undefined)
+    {
+        var loadedFile = new File(imagePath);
+        var importDoc = open(loadedFile);
 
-    var importedLayer = importDoc.artLayers[0].duplicate(mainDoc);
-    app.activeDocument = mainDoc;
-    importDoc.close();
+        var importedLayer = importDoc.artLayers[0].duplicate(mainDoc);
+        app.activeDocument = mainDoc;
+        importDoc.close();
 
-    importedLayer.name = "TMP_IMAGE";
-    importedLayer.move(folderLayer, ElementPlacement.INSIDE);
-    return importedLayer;
+        importedLayer.name = "TMP_IMAGE";
+        importedLayer.move(folderLayer, ElementPlacement.INSIDE);
+        return importedLayer;
+    }
+    return undefined
 }
 
 function RemoveAllSubLayers(curLayer)
@@ -220,14 +229,14 @@ function GenerateFrontBackPDF(inputFiles, exportPath)
 
 function GenerateCardsBoard(parsedCSV)
 {
-    var exportFolder = Folder(exportFolderCat);
-    if(!exportFolder.exists) 
-    {
-        exportFolder.create();
-    }
+    //var exportFolder = Folder(exportFolderCat);
+    //if(!exportFolder.exists) 
+    //{
+     //   exportFolder.create();
+    //}
 
-    var exportBoardFoler = exportFolderCat + "/Boards";
-    var boardFolder = Folder(exportBoardFoler);
+    var exportBoardFolder = rootPath + "/Boards";
+    var boardFolder = Folder(exportBoardFolder);
     if(!boardFolder.exists) 
     {
         boardFolder.create();
@@ -275,7 +284,7 @@ function GenerateCardsBoard(parsedCSV)
                     var cardQtty = parsedCSV.m_entryList[u][i];
                     break;
                 case "BACK":                    
-                    backImgPath = rootPath + "/" + parsedCSV.m_entryList[u][i] + ".png";
+                    backImgPath = rootPath + "/" + entryTypeAr[0] + "/" + parsedCSV.m_entryList[u][i] + ".png";
                     break;
                 default:
                     break;
@@ -283,7 +292,7 @@ function GenerateCardsBoard(parsedCSV)
         }
 
         //var cardFolderCat = exportFolderCat + "/" + exportCategory;
-        var fullCardPath = exportFolderCat + "/" + exportCategory + "/" + cardID + ".png";
+        var fullCardPath = rootPath + "/" + exportCategory + "/" + cardID + ".png";
 
         if(cardQtty > 0)
         {
@@ -316,7 +325,7 @@ function GenerateCardsBoard(parsedCSV)
                     }
 
                     // Generateboard file name and export as png
-                    var exportBoardFile = exportBoardFoler + "/BoardFile" + boardFileNumber + curCardBoardNb + ".png";
+                    var exportBoardFile = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + ".png";
                     var saveFile = new File(exportBoardFile);
                     var pngOpts = new PNGSaveOptions();
                     pngOpts.interlaced = false;
@@ -326,13 +335,13 @@ function GenerateCardsBoard(parsedCSV)
                     RemoveAllSubLayers(GetLayerFromRoot(ParseLayerPath("IMAGE")));
 
                     // Generate back images
-                    var exportBoardBackFile = exportBoardFoler + "/BoardFile" + boardFileNumber + curCardBoardNb + "_BACK.png";
+                    var exportBoardBackFile = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + "_BACK.png";
                     var saveBackFile = new File(exportBoardBackFile);
                     GeneradeCardsBoardFromCardInfoList(backImageInfos, saveBackFile); // Generate back of cards
                     backImageInfos = [];
 
                     // Generated PDF with front and back matching for easy printing
-                    var pdfFrontBackPath = exportBoardFoler + "/BoardFile" + boardFileNumber + curCardBoardNb + ".pdf";
+                    var pdfFrontBackPath = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + ".pdf";
                     GenerateFrontBackPDF([saveFile, saveBackFile], pdfFrontBackPath);
                     allImageFiles.push(saveFile);
                     allImageFiles.push(saveBackFile);
@@ -373,7 +382,7 @@ function GenerateCardsBoard(parsedCSV)
     }
 
     // Generateboard file name and export as png
-    var exportBoardFile = exportBoardFoler + "/BoardFile" + boardFileNumber + curCardBoardNb + ".png";
+    var exportBoardFile = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + ".png";
     var saveFile = new File(exportBoardFile);
     var pngOpts = new PNGSaveOptions();
     pngOpts.interlaced = false;
@@ -382,11 +391,11 @@ function GenerateCardsBoard(parsedCSV)
     if(backImageInfos.length > 0)
     {        
         RemoveAllSubLayers(GetLayerFromRoot(ParseLayerPath("IMAGE")));
-        var exportBoardBackFile = exportBoardFoler + "/BoardFile" + boardFileNumber + curCardBoardNb + "_BACK.png";
+        var exportBoardBackFile = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + "_BACK.png";
         var saveBackFile =  new File(exportBoardBackFile);
         GeneradeCardsBoardFromCardInfoList(backImageInfos, saveBackFile);
 
-        var pdfFrontBackPath = exportBoardFoler + "/BoardFile" + boardFileNumber + curCardBoardNb + ".pdf";
+        var pdfFrontBackPath = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + ".pdf";
         GenerateFrontBackPDF([saveFile, saveBackFile], pdfFrontBackPath);
         allImageFiles.push(saveFile);
         allImageFiles.push(saveBackFile);
@@ -394,7 +403,7 @@ function GenerateCardsBoard(parsedCSV)
 
     if(allImageFiles.length > 0)
     {
-        var pdfAllFilesPath = exportBoardFoler + "/BoardFile_ALL.pdf";
+        var pdfAllFilesPath = exportBoardFolder + "/BoardFile_ALL.pdf";
         GenerateFrontBackPDF(allImageFiles, pdfAllFilesPath);
     }
 }
@@ -412,7 +421,7 @@ function GenerateCardsBoard(parsedCSV)
         var csvPath = files[i].fsName.replace(/\\/g, '/');
     //     //alert(csvPath);
         var parsedCSV = new CSVData(csvPath);
-        //GenerateCards(parsedCSV);
+        GenerateCards(parsedCSV);
         GenerateCardsBoard(parsedCSV);
     }
     
