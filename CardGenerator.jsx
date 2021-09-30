@@ -125,7 +125,7 @@ function GenerateCards(parsedCSV)
                     SetTextLayer(entryTypeAr[1], parsedCSV.m_entryList[u][i]);
                     break;
                 case "CATEGORY":
-                    exportCategory = exportFolderCat + "/" + entryTypeAr[1] + "/" + parsedCSV.m_entryList[u][i];
+                    exportCategory = entryTypeAr[1] + "/" + parsedCSV.m_entryList[u][i];
                     break;
                 default:
                     break;
