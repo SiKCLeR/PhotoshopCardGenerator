@@ -1,0 +1,81 @@
+ID,CATEGORY@EXPORT,TEMPLATE@RESOURCES,TEXT@Title,TEXT@Level,TEXT@LevelWest,TEXT@LevelNorth,TEXT@LevelEast,TEXT@LevelSouth,TEXT@RevealDesc,TEXT@CrossDesc,BACK@EXPORT/TERRAIN,QUANTITY
+Terrain_Lvl0_Forest01,TERRAIN,TestCard_TerrainFront_Square_Medium,Forêt,0,0,0,0,0,,,Terrain_Lvl0_Forest01_Back,1
+Terrain_Lvl0_Forest01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Forêt du cap rond,0,0,0,0,0,"Camp Oublié:
+(Joueurs)1D6: Si >4 piochez, 1 carte objet",,,0
+Terrain_Lvl0_Forest02,TERRAIN,TestCard_TerrainFront_Square_Medium,Forêt,0,1,0,0,0,,,Terrain_Lvl0_Forest02_Back,1
+Terrain_Lvl0_Forest02_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Forêt ombragée,0,1,0,0,0,Piochez 1 carte évènement,,,0
+Terrain_Lvl0_Plain01,TERRAIN,TestCard_TerrainFront_Square_Medium,Plaine,0,0,0,0,1,,,Terrain_Lvl0_Plain01_Back,1
+Terrain_Lvl0_Plain01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Plaines agricoles,0,0,0,0,1,Piochez 1 carte évènement,Vous ne pouvez pas placer de feu de camp sur cette carte terrain,,0
+Terrain_Lvl0_Plain02,TERRAIN,TestCard_TerrainFront_Square_Medium,Plaine,0,0,0,0,0,,,Terrain_Lvl0_Plain02_Back,1
+Terrain_Lvl0_Plain02_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Prairies des collines blanches,0,0,0,0,0,Piochez 1 carte évènement,,,0
+Terrain_Lvl0_Town01,TERRAIN,TestCard_TerrainFront_Square_Medium,Village,0,0,0,1,0,,,Terrain_Lvl0_Town01_Back,1
+Terrain_Lvl0_Town01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Bourg aux cyprès,0,0,0,1,0,,"Marchand:
+5 trésors à l'achat
+Taverne:
+Tarif -2XP/Joueur",,0
+Terrain_Lvl0_Lake01,TERRAIN,TestCard_TerrainFront_Square_Medium,Lac,0,0,1,0,0,,,Terrain_Lvl0_Lake01_Back,1
+Terrain_Lvl0_Lake01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Lac de lune,0,0,1,0,0,Piochez 1 carte évènement,"(Groupe)1D6:
+<3 piochez 1 carte évènement",,0
+Terrain_Lvl1_Forest01,TERRAIN,TestCard_TerrainFront_Square_Medium,Forêt,1,1,1,1,1,,,Terrain_Lvl1_Forest01_Back,1
+Terrain_Lvl1_Forest01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Forêt du cap rond,1,1,1,1,1,Piochez 1 carte évènement,"(Joueurs)1D6:
+<3 vous vous égarez, -1PV",,0
+Terrain_Lvl1_Town01,TERRAIN,TestCard_TerrainFront_Square_Medium,Village,1,2,1,1,1,,,Terrain_Lvl1_Town01_Back,1
+Terrain_Lvl1_Town01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Bourg aux cyprès,1,2,1,1,1,"(Groupe)Taxe de Passage:
+-1XP","Marchand:
+7 trésors à l'achat
+Taverne:
+Tarif -3XP/Joueur",,0
+Terrain_Lvl1_Swamp01,TERRAIN,TestCard_TerrainFront_Square_Medium,Marais,1,1,1,1,2,,,Terrain_Lvl1_Swamp01_Back,1
+Terrain_Lvl1_Swamp01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Marais du roi,1,1,1,1,2,"Sable mouvants
+(Joueurs)1D6:
+<4 vous passez le 1er tour d'évènement
+Piochez 1 carte évènement","Sable mouvants
+(Joueurs)1D6:
+<4 vous restez coincé, -1PV",,0
+Terrain_Lvl1_Desert01,TERRAIN,TestCard_TerrainFront_Square_Medium,Desert,1,1,1,1,1,,,Terrain_Lvl1_Desert01_Back,1
+Terrain_Lvl1_Desert01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Marais du roi,1,1,1,1,1,"Savoir ancien:
+(Joueurs)1D6:
+>5 piochez +1XP
+Piochez une carte évènement","Chaleur intense:
+Si vous n'avez rien d'équipé sur votre tête, perdez -2PV",,0
+Terrain_Lvl1_Plaine01,TERRAIN,TestCard_TerrainFront_Square_Medium,Plaine,1,1,1,2,1,,,Terrain_Lvl1_Plaine01_Back,1
+Terrain_Lvl1_Plaine01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Plaine du levant,1,1,1,2,1,"Traces étranges:
+(Groupe)1D6:
+>3 Piochez 1 carte evènement",,,0
+Terrain_Lvl1_Hills01,TERRAIN,TestCard_TerrainFront_Square_Medium,Colline,1,1,2,1,1,,,Terrain_Lvl1_Hills01_Back,1
+Terrain_Lvl1_Hills01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Colline aux vents,1,1,2,1,1,"Bruits stridents:
+(Joueurs)1D6:
+<4 Piochez 1 carte monstre lvl1",Piochez 1 carte évènement,,0
+Terrain_Lvl2_Ruins01,TERRAIN,TestCard_TerrainFront_Square_Medium,Ruines,2,2,3,2,2,,,Terrain_Lvl2_Ruins01_Back,1
+Terrain_Lvl2_Ruins01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Ruines aux ombres,2,2,3,2,2,Piochez 1 carte evènement,Piochez 1 carte évènement,,0
+Terrain_Lvl2_Canyon01,TERRAIN,TestCard_TerrainFront_Square_Medium,Canyon,2,2,2,2,3,,,Terrain_Lvl2_Canyon01_Back,1
+Terrain_Lvl2_Canyon01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Canyon des vents hurlants,2,2,2,2,3,Piochez 1 carte evènement,Piochez 1 carte évènement,,0
+Terrain_Lvl2_Forest01,TERRAIN,TestCard_TerrainFront_Square_Medium,Forêt,2,2,2,3,2,,,Terrain_Lvl2_Forest01_Back,1
+Terrain_Lvl2_Forest01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Forêt perdue,2,2,2,3,2,Piochez 1 carte evènement,"(Joueurs)1D6:
+<5 vous vous égarez, -3PV",,0
+Terrain_Lvl2_Town01,TERRAIN,TestCard_TerrainFront_Square_Medium,VIllage,2,2,2,2,3,,,Terrain_Lvl2_Town01_Back,1
+Terrain_Lvl2_Town01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Village des âmes égarées,2,2,2,2,3,Piochez 1 carte evènement,"Marchand:
+3 trésors à l'achat
+Taverne:
+Tarif -4XP/Joueur",,0
+Terrain_Lvl2_Lake01,TERRAIN,TestCard_TerrainFront_Square_Medium,Lac,2,3,2,2,2,,,Terrain_Lvl2_Lake01_Back,1
+Terrain_Lvl2_Lake01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Lac des morts,2,3,2,2,2,Piochez 1 carte evènement,Piochez 1 carte évènement,,0
+Terrain_Lvl2_Forest02,TERRAIN,TestCard_TerrainFront_Square_Medium,Forêt,2,2,2,3,2,,,Terrain_Lvl2_Forest02_Back,1
+Terrain_Lvl2_Forest02_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Forêt maudite,2,2,2,3,2,Piochez 1 carte evènement,"(Joueurs)1D6:
+<3 piochez 2 carte monstre lvl2
+<5 piochez 1 carte monstre lvl2",,0
+Terrain_Lvl2_Swamp01,TERRAIN,TestCard_TerrainFront_Square_Medium,Marais,2,2,2,2,3,,,Terrain_Lvl2_Swamp01_Back,1
+Terrain_Lvl2_Swamp01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Marais des morts,2,2,2,2,3,Piochez 1 carte evènement,"Sable mouvants
+(Joueurs)1D6:
+<2 vous êtes happé par le sol, -5PV
+<5 vous restez coincé, -2PV",,0
+Terrain_Lvl2_Plain01,TERRAIN,TestCard_TerrainFront_Square_Medium,Plaine,2,2,2,3,2,,,Terrain_Lvl2_Plaine01_Back,1
+Terrain_Lvl2_Plaine01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Plaines des âmes oubliées,2,2,2,3,2,Piochez 1 carte evènement,,,0
+Terrain_Lvl3_Forest01,TERRAIN,TestCard_TerrainFront_Square_Medium,Forêt,3,3,3,3,3,,,Terrain_Lvl3_Forest01_Back,1
+Terrain_Lvl3_Forest01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Forêt secrète,3,3,3,3,3,Piochez 1 carte evènement,Piochez 1 carte evènement,,0
+Terrain_Lvl3_Ruins01,TERRAIN,TestCard_TerrainFront_Square_Medium,Ruines,3,3,3,3,3,,,Terrain_Lvl3_Ruins01_Back,1
+Terrain_Lvl3_Ruins01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Ruines de la cité sainte,3,3,3,3,3,Piochez 1 carte evènement,Piochez 1 carte evènement,,0
+Terrain_Lvl3_Lake01,TERRAIN,TestCard_TerrainFront_Square_Medium,Lac,3,3,3,3,3,,,Terrain_Lvl3_Lake01_Back,1
+Terrain_Lvl3_Lake01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Lac du repenti,3,3,3,3,3,Piochez 1 carte evènement,Piochez 1 carte evènement,,0
+Terrain_Lvl3_Swamp01,TERRAIN,TestCard_TerrainFront_Square_Medium,Marais,3,3,3,3,3,,,Terrain_Lvl3_Swamp01_Back,1
+Terrain_Lvl3_Swamp01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Marais du dernier jour,3,3,3,3,3,Piochez 1 carte evènement,Piochez 1 carte evènement,,0

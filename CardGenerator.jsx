@@ -1,6 +1,6 @@
 #include "CSVParser.jsx"; // Only works with recent versions of CS, doesn't work with CS2
 
-var rootPath = app.activeDocument.path.fsName.replace(/\\/g, '/');
+var rootPath;// = app.activeDocument.path.fsName.replace(/\\/g, '/');
 
 function ImagePosInfos() // Class definition (yup it's weird in JSX)
 {
@@ -109,7 +109,14 @@ function GenerateCards(parsedCSV)
                     break;
                 case "TEMPLATE":
                     var templatePath = rootPath + "/" + entryTypeAr[1] + "/" + parsedCSV.m_entryList[u][i] + ".psd"
-                    if(app.activeDocument.fullName.fsName.replace(/\\/g, '/').toLowerCase() != templatePath.toLowerCase())
+                    try
+                    {
+                        if(app.activeDocument.fullName.fsName.replace(/\\/g, '/').toLowerCase() != templatePath.toLowerCase())
+                        {
+                            app.open(new File(templatePath));
+                        }
+                    }
+                    catch(error)
                     {
                         app.open(new File(templatePath));
                     }
@@ -278,13 +285,13 @@ function GenerateCardsBoard(parsedCSV)
                     cardID = parsedCSV.m_entryList[u][i];
                     break;
                 case "CATEGORY":
-                    exportCategory = parsedCSV.m_entryList[u][i];
+                    exportCategory = entryTypeAr[1] + "/" + parsedCSV.m_entryList[u][i];
                     break;
                 case "QUANTITY":
                     var cardQtty = parsedCSV.m_entryList[u][i];
                     break;
                 case "BACK":                    
-                    backImgPath = rootPath + "/" + entryTypeAr[0] + "/" + parsedCSV.m_entryList[u][i] + ".png";
+                    backImgPath = rootPath + "/" + entryTypeAr[1] + "/" + parsedCSV.m_entryList[u][i] + ".png";
                     break;
                 default:
                     break;
@@ -293,6 +300,7 @@ function GenerateCardsBoard(parsedCSV)
 
         //var cardFolderCat = exportFolderCat + "/" + exportCategory;
         var fullCardPath = rootPath + "/" + exportCategory + "/" + cardID + ".png";
+        var lastCard;
 
         if(cardQtty > 0)
         {
@@ -308,14 +316,14 @@ function GenerateCardsBoard(parsedCSV)
                     curCard = origCard.duplicate();
                 }
 
-                if((lastPosX + importWidth) > (docWidth - printMarginHorizontal))
+                if((lastPosX + importWidth) > (docWidth - (2*printMarginHorizontal)))
                 {
                     lastPosX = printMarginHorizontal;
-                    lastPosY = curCard.bounds[3];
+                    lastPosY = lastCard.bounds[3];
                 }
 
                 // If we don't have anymore space in this board
-                if((lastPosY + importHeight) > (docHeight - printMarginVertical))
+                if((lastPosY + importHeight) > (docHeight - (2*printMarginVertical)))
                 {
                     // Generate clean board number (format: _XXX)
                     var boardFileNumber = "_0";
@@ -348,8 +356,8 @@ function GenerateCardsBoard(parsedCSV)
 
                     // Update board number, clean positions and all current content
                     curCardBoardNb += 1;
-                    var lastPosX = printMarginHorizontal;
-                    var lastPosY = printMarginVertical;
+                    lastPosX = printMarginHorizontal;
+                    lastPosY = printMarginVertical;
 
                     //Reload current card as we just cleaned everything, this is ugly but it doesn't really matter
                     origCard = LoadImageIntoPosition("IMAGE", fullCardPath);
@@ -361,6 +369,7 @@ function GenerateCardsBoard(parsedCSV)
 
                 curCard.translate(XTranslate, YTranslate);  
                 lastPosX = curCard.bounds[2];
+                lastCard = curCard;
 
                 if (backImgPath != "") 
                 {
@@ -414,12 +423,14 @@ function GenerateCardsBoard(parsedCSV)
     var myMessage = myWindow.add ("statictext");
     myMessage.text = "Hello, world!";
     myWindow.show ( );*/
-    
+    //alert(app.activeDocument.saved);
+
     var files = openDialog();
     for(var i = 0; i < files.length; i++)
     {
         var csvPath = files[i].fsName.replace(/\\/g, '/');
-    //     //alert(csvPath);
+        rootPath = files[i].path.replace(/\\/g, '/');
+        
         var parsedCSV = new CSVData(csvPath);
         GenerateCards(parsedCSV);
         GenerateCardsBoard(parsedCSV);

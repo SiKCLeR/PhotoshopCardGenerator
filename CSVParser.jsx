@@ -9,16 +9,21 @@ function CSVData(_filePath) // Class definition (yup it's weird in JSX)
     var curEntry = '';
     var curChar = '';
     var curEntryList = [];
+    var inQuineBrackets = false;
     curChar += fs.readch();
 
     while(!fs.eof)
     {
-        if(curChar == ',') // Next Entry
+        if(curChar == '"')
+        {
+            inQuineBrackets = !inQuineBrackets;
+        }
+        else if(!inQuineBrackets && curChar == ',') // Next Entry
         {
             curEntryList.push(curEntry);
             curEntry = '';
         }
-        else if(curChar == '\n') // Next Line
+        else if(!inQuineBrackets && curChar == '\n') // Next Line
         {
             if(curEntryList.length > 0) // Sometimes we have multiple \n back to back (I don't know why)
             {
@@ -42,9 +47,13 @@ function CSVData(_filePath) // Class definition (yup it's weird in JSX)
         curChar = fs.readch();
     }
 
-    if(curEntry != "")
+    if(curEntry != "") //Push last entry if the file ends in the middle of it (would be weird)
     {
-        curEntryList.push(curEntry);
+        curEntryList.push(curEntry);        
+    }
+
+    if(curEntryList.length > 0) //Add last entry list if its not empty (happens when eof is at the end of the last entry)
+    {
         this.m_entryList[this.m_entryList.length] = curEntryList;
     }
 
