@@ -1,6 +1,7 @@
 #include "CSVParser.jsx"; // Only works with recent versions of CS, doesn't work with CS2
 
 var rootPath;// = app.activeDocument.path.fsName.replace(/\\/g, '/');
+var rootName;
 
 function ImagePosInfos() // Class definition (yup it's weird in JSX)
 {
@@ -129,7 +130,7 @@ function GenerateCards(parsedCSV)
                     SetOnlyActiveLayer(entryTypeAr[1], parsedCSV.m_entryList[u][i]);
                     break;
                 case "TEXT":
-                    SetTextLayer(entryTypeAr[1], parsedCSV.m_entryList[u][i]);
+                    SetTextLayer(entryTypeAr[1], parsedCSV.m_entryList[u][i].replace(/(?:\r\n|\n)/g, '\r'));
                     break;
                 case "CATEGORY":
                     exportCategory = entryTypeAr[1] + "/" + parsedCSV.m_entryList[u][i];
@@ -333,7 +334,7 @@ function GenerateCardsBoard(parsedCSV)
                     }
 
                     // Generateboard file name and export as png
-                    var exportBoardFile = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + ".png";
+                    var exportBoardFile = exportBoardFolder + "/BoardFile_" + rootName + boardFileNumber + curCardBoardNb + ".png";
                     var saveFile = new File(exportBoardFile);
                     var pngOpts = new PNGSaveOptions();
                     pngOpts.interlaced = false;
@@ -343,13 +344,13 @@ function GenerateCardsBoard(parsedCSV)
                     RemoveAllSubLayers(GetLayerFromRoot(ParseLayerPath("IMAGE")));
 
                     // Generate back images
-                    var exportBoardBackFile = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + "_BACK.png";
+                    var exportBoardBackFile = exportBoardFolder + "/BoardFile_" + rootName + boardFileNumber + curCardBoardNb + "_BACK.png";
                     var saveBackFile = new File(exportBoardBackFile);
                     GeneradeCardsBoardFromCardInfoList(backImageInfos, saveBackFile); // Generate back of cards
                     backImageInfos = [];
 
                     // Generated PDF with front and back matching for easy printing
-                    var pdfFrontBackPath = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + ".pdf";
+                    var pdfFrontBackPath = exportBoardFolder + "/BoardFile_" + rootName + boardFileNumber + curCardBoardNb + ".pdf";
                     GenerateFrontBackPDF([saveFile, saveBackFile], pdfFrontBackPath);
                     allImageFiles.push(saveFile);
                     allImageFiles.push(saveBackFile);
@@ -391,7 +392,7 @@ function GenerateCardsBoard(parsedCSV)
     }
 
     // Generateboard file name and export as png
-    var exportBoardFile = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + ".png";
+    var exportBoardFile = exportBoardFolder + "/BoardFile_" + rootName + boardFileNumber + curCardBoardNb + ".png";
     var saveFile = new File(exportBoardFile);
     var pngOpts = new PNGSaveOptions();
     pngOpts.interlaced = false;
@@ -400,11 +401,11 @@ function GenerateCardsBoard(parsedCSV)
     if(backImageInfos.length > 0)
     {        
         RemoveAllSubLayers(GetLayerFromRoot(ParseLayerPath("IMAGE")));
-        var exportBoardBackFile = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + "_BACK.png";
+        var exportBoardBackFile = exportBoardFolder + "/BoardFile_" + rootName + boardFileNumber + curCardBoardNb + "_BACK.png";
         var saveBackFile =  new File(exportBoardBackFile);
         GeneradeCardsBoardFromCardInfoList(backImageInfos, saveBackFile);
 
-        var pdfFrontBackPath = exportBoardFolder + "/BoardFile" + boardFileNumber + curCardBoardNb + ".pdf";
+        var pdfFrontBackPath = exportBoardFolder + "/BoardFile_" + rootName + boardFileNumber + curCardBoardNb + ".pdf";
         GenerateFrontBackPDF([saveFile, saveBackFile], pdfFrontBackPath);
         allImageFiles.push(saveFile);
         allImageFiles.push(saveBackFile);
@@ -412,7 +413,7 @@ function GenerateCardsBoard(parsedCSV)
 
     if(allImageFiles.length > 0)
     {
-        var pdfAllFilesPath = exportBoardFolder + "/BoardFile_ALL.pdf";
+        var pdfAllFilesPath = exportBoardFolder + "/BoardFile_" + rootName + "_ALL.pdf";
         GenerateFrontBackPDF(allImageFiles, pdfAllFilesPath);
     }
 }
@@ -423,14 +424,14 @@ function GenerateCardsBoard(parsedCSV)
     var myMessage = myWindow.add ("statictext");
     myMessage.text = "Hello, world!";
     myWindow.show ( );*/
-    //alert(app.activeDocument.saved);
 
     var files = openDialog();
     for(var i = 0; i < files.length; i++)
     {
         var csvPath = files[i].fsName.replace(/\\/g, '/');
         rootPath = files[i].path.replace(/\\/g, '/');
-        
+        rootName = files[i].name.replace(/%20/g,' ');
+
         var parsedCSV = new CSVData(csvPath);
         GenerateCards(parsedCSV);
         GenerateCardsBoard(parsedCSV);
