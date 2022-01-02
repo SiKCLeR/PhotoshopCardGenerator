@@ -1,4 +1,4 @@
-ID,CATEGORY@EXPORT,TEMPLATE@RESOURCES,TEXT@Title,TEXT@Level,TEXT@LevelWest,TEXT@LevelNorth,TEXT@LevelEast,TEXT@LevelSouth,TEXT@RevealDesc,TEXT@CrossDesc,BACK@EXPORT/TERRAIN,QUANTITY
+ID,CATEGORY@EXPORT,TEMPLATE@RESOURCES,TEXT@Title,TEXT@Level,TEXT@Direction/LevelWest,TEXT@Direction/LevelNorth,TEXT@Direction/LevelEast,TEXT@Direction/LevelSouth,TEXT@RevealDesc,TEXT@CrossDesc,BACK@EXPORT/TERRAIN,QUANTITY
 Terrain_Lvl0_Forest01,TERRAIN,TestCard_TerrainFront_Square_Medium,Forêt,0,0,0,0,0,,,Terrain_Lvl0_Forest01_Back,1
 Terrain_Lvl0_Forest01_Back,TERRAIN,TestCard_TerrainBack_Square_Medium,Forêt du cap rond,0,0,0,0,0,"Camp Oublié:
 (Joueurs)1D6: Si >4 piochez, 1 carte objet",,,0

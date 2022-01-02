@@ -161,7 +161,7 @@ function GenerateCards(parsedCSV)
     }
 }
 
-function LoadImageIntoPosition(layerSetPath, imagePath)
+function LoadImageIntoLayerSet(layerSetPath, imagePath)
 {
     var mainDoc = activeDocument;
     var folderLayer = GetLayerFromRoot(ParseLayerPath(layerSetPath));
@@ -200,7 +200,7 @@ function GeneradeCardsBoardFromCardInfoList(_cardInfoList, _saveBackFile)
         var curCard;
         if(_cardInfoList[i].m_imagePath != prevCard)
         {
-            curCard = LoadImageIntoPosition("IMAGE", _cardInfoList[i].m_imagePath);
+            curCard = LoadImageIntoLayerSet("IMAGE", _cardInfoList[i].m_imagePath);
             prevCard = _cardInfoList[i].m_imagePath;
         }
         else
@@ -237,12 +237,6 @@ function GenerateFrontBackPDF(inputFiles, exportPath)
 
 function GenerateCardsBoard(parsedCSV)
 {
-    //var exportFolder = Folder(exportFolderCat);
-    //if(!exportFolder.exists) 
-    //{
-     //   exportFolder.create();
-    //}
-
     var exportBoardFolder = rootPath + "/Boards";
     var boardFolder = Folder(exportBoardFolder);
     if(!boardFolder.exists) 
@@ -305,7 +299,15 @@ function GenerateCardsBoard(parsedCSV)
 
         if(cardQtty > 0)
         {
-            var origCard = LoadImageIntoPosition("IMAGE", fullCardPath);
+            var origCard = LoadImageIntoLayerSet("IMAGE", fullCardPath);
+
+            var origX = origCard.bounds[0];
+            var origY = origCard.bounds[1];
+            if(origX != 0 || origY != 0)
+            {
+                origCard.translate(-origX, -origY);
+            }
+
             var importWidth = origCard.bounds[2].value; //[0] = X, [1] = Y, [2] = SizeX, [3] = SizeY; IN PIXELS
             var importHeight = origCard.bounds[3].value; //[0] = X, [1] = Y, [2] = SizeX, [3] = SizeY; IN PIXELS
             var curCard = origCard;
@@ -326,6 +328,9 @@ function GenerateCardsBoard(parsedCSV)
                 // If we don't have anymore space in this board
                 if((lastPosY + importHeight) > (docHeight - (2*printMarginVertical)))
                 {
+                    // We don't anticipate (need to refactor the code) so we realise too late that we don't have space for another card
+                    curCard.remove();
+
                     // Generate clean board number (format: _XXX)
                     var boardFileNumber = "_0";
                     if(curCardBoardNb < 10)
@@ -361,7 +366,7 @@ function GenerateCardsBoard(parsedCSV)
                     lastPosY = printMarginVertical;
 
                     //Reload current card as we just cleaned everything, this is ugly but it doesn't really matter
-                    origCard = LoadImageIntoPosition("IMAGE", fullCardPath);
+                    origCard = LoadImageIntoLayerSet("IMAGE", fullCardPath);
                     curCard = origCard;
                 }
 
@@ -430,7 +435,7 @@ function GenerateCardsBoard(parsedCSV)
     {
         var csvPath = files[i].fsName.replace(/\\/g, '/');
         rootPath = files[i].path.replace(/\\/g, '/');
-        rootName = files[i].name.replace(/%20/g,' ');
+        rootName = files[i].name.replace(/%20/g,' ').split(".")[0];
 
         var parsedCSV = new CSVData(csvPath);
         GenerateCards(parsedCSV);
