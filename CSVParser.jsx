@@ -47,6 +47,11 @@ function CSVData(_filePath) // Class definition (yup it's weird in JSX)
         curChar = fs.readch();
     }
 
+    if(curChar != undefined) //Apparently when we get out of the loop we still have one character to read
+    {
+        curEntry += curChar;
+    }
+
     if(curEntry != "") //Push last entry if the file ends in the middle of it (would be weird)
     {
         curEntryList.push(curEntry);        
